@@ -27,9 +27,12 @@ namespace LethalLogger.Patches
                 if (playercontrollerb != null && (playercontrollerb.isPlayerControlled || playercontrollerb.isPlayerDead))
                 {
                     if (playercontrollerb.isPlayerDead) { dead_players++; logger.LogInfo(playercontrollerb.causeOfDeath); } else { living_players++; }
+                    logger.LogInfo("Studying: " + playercontrollerb.playerUsername);
                 }
                 logger.LogInfo("Living: " + living_players + " dead: " + dead_players);
-                logger.LogInfo("Current Scrap Value is " + __instance.GetValueOfAllScrap(true) + " out of a max " + __instance.GetValueOfAllScrap());
+                logger.LogInfo("Current Scrap Value is " + __instance.GetValueOfAllScrap(true) + " out of a max " + __instance.GetValueOfAllScrap(false));
+                logger.LogInfo("Planet is: " + __instance.currentLevel.PlanetName);
+                logger.LogInfo("Planet Weather was: " + __instance.currentLevel.currentWeather);
                 //count dead players
                 //get each player controller and get the cause of death
                 //get player names
