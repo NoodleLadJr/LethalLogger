@@ -1,13 +1,15 @@
 ﻿using BepInEx.Logging;
 using GameNetcodeStuff;
 using HarmonyLib;
-using JetBrains.Annotations;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using Newtonsoft.Json;
+using System.Xml.Linq;
 
 namespace LethalLogger.Patches
 {
@@ -25,8 +27,9 @@ namespace LethalLogger.Patches
             public int daysRemaining;
             public String planetName;
             public String weather;
-            public IDictionary<String, int> gear;
-            public IDictionary<String, String> playerStatus;   
+            public String seed;
+            public IDictionary<string, int> gear = new Dictionary<string, int>();
+            public IDictionary<string, string> playerStatus = new Dictionary<string, string>();
 
         }
 
@@ -48,7 +51,7 @@ namespace LethalLogger.Patches
                     if (playercontrollerb.isPlayerDead) {
                         roundInfo.dead++;
                         roundInfo.playerStatus[playercontrollerb.playerUsername] = playercontrollerb.causeOfDeath.ToString();
-                        logger.LogInfo(playercontrollerb.causeOfDeath); 
+
                     } else { 
                         roundInfo.living++;
                         roundInfo.playerStatus[playercontrollerb.playerUsername] = "Alive";
@@ -61,7 +64,6 @@ namespace LethalLogger.Patches
             {
                 if (grabbable != null && grabbable.scrapValue == 0)
                 {
-                    logger.LogInfo(grabbable.GetType().Name);
                     if (roundInfo.gear.ContainsKey(grabbable.GetType().Name)) { roundInfo.gear[grabbable.GetType().Name] += 1; }
                     else
                     {
@@ -72,10 +74,36 @@ namespace LethalLogger.Patches
             roundInfo.scrapMax = __instance.GetValueOfAllScrap(false);
             roundInfo.scrapReal = __instance.GetValueOfAllScrap(true);
             roundInfo.planetName = __instance.currentLevel.PlanetName;
-            roundInfo.weather = __instance.currentLevel.PlanetName;
+            roundInfo.weather = __instance.currentLevel.currentWeather.ToString();
             TimeOfDay timeOfDay = UnityEngine.Object.FindObjectOfType<TimeOfDay>();
             roundInfo.quota = timeOfDay.profitQuota;
             roundInfo.daysRemaining = timeOfDay.daysUntilDeadline;
+            roundInfo.seed = __instance.randomMapSeed.ToString();
+
+            const String FILEOUT = "LethalLoggerOut.json";
+            try
+            {
+                if (File.Exists(FILEOUT))
+                {
+                    string existing = File.ReadAllText(FILEOUT);
+                    List<RoundInfo> existingData = JsonConvert.DeserializeObject<List<RoundInfo>>(existing) ?? new List<RoundInfo>();
+                    existingData.Add(roundInfo);
+                    string jstring = JsonConvert.SerializeObject(existingData);
+                    File.WriteAllText(FILEOUT, jstring);
+                }
+                else 
+                {
+                    string jstring = JsonConvert.SerializeObject(new List<RoundInfo> { roundInfo});
+                    File.WriteAllText(FILEOUT, jstring);
+                }
+                logger.LogInfo("logged successfully");
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions appropriately
+                logger.LogWarning(ex);
+            }
+
             //count dead players done
             //get each player controller and get the cause of death done
             //get player names done
@@ -84,7 +112,8 @@ namespace LethalLogger.Patches
             //get planet done
             //get gear
             //get current quota
-            //get unlockables
+            //TODO: get unlockables
+            //get seed
             //write file
 
         }
