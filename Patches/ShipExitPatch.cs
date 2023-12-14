@@ -29,20 +29,31 @@ namespace LethalLogger.Patches
                     if (playercontrollerb.isPlayerDead) { dead_players++; logger.LogInfo(playercontrollerb.causeOfDeath); } else { living_players++; }
                     logger.LogInfo("Studying: " + playercontrollerb.playerUsername);
                 }
-                logger.LogInfo("Living: " + living_players + " dead: " + dead_players);
-                logger.LogInfo("Current Scrap Value is " + __instance.GetValueOfAllScrap(true) + " out of a max " + __instance.GetValueOfAllScrap(false));
-                logger.LogInfo("Planet is: " + __instance.currentLevel.PlanetName);
-                logger.LogInfo("Planet Weather was: " + __instance.currentLevel.currentWeather);
-                //count dead players
-                //get each player controller and get the cause of death
-                //get player names
-                //get planet name
-                //get planet weather
-                //get planet
-                //get current quota
-                //write file
+
             }
-            
+
+            foreach (GrabbableObject grabbable in UnityEngine.Object.FindObjectsOfType<GrabbableObject>())
+            {
+                if (grabbable != null && grabbable.scrapValue == 0)
+                {
+                    logger.LogInfo(grabbable.GetType().Name);
+                }
+            }
+
+            logger.LogInfo("Living: " + living_players + " dead: " + dead_players);
+            logger.LogInfo("Current Scrap Value is " + __instance.GetValueOfAllScrap(true) + " out of a max " + __instance.GetValueOfAllScrap(false));
+            logger.LogInfo("Planet is: " + __instance.currentLevel.PlanetName);
+            logger.LogInfo("Planet Weather was: " + __instance.currentLevel.currentWeather);
+            //count dead players done
+            //get each player controller and get the cause of death done
+            //get player names done
+            //get planet name done
+            //get planet weather done
+            //get planet done
+            //get gear
+            //get current quota
+            //write file
+
         }
     }
 }
