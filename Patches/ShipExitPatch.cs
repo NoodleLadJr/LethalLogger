@@ -21,6 +21,7 @@ namespace LethalLogger.Patches
             //set to true to get collected, missed will be the diff
             int dead_players = 0;
             int living_players = 0;
+            IDictionary<String,int> gear = new Dictionary<String,int>(); 
 
             foreach (PlayerControllerB playercontrollerb in GameObject.FindObjectsOfType<PlayerControllerB>())
             {
@@ -37,6 +38,11 @@ namespace LethalLogger.Patches
                 if (grabbable != null && grabbable.scrapValue == 0)
                 {
                     logger.LogInfo(grabbable.GetType().Name);
+                    if (gear.ContainsKey(grabbable.GetType().Name)) { gear[grabbable.GetType().Name] += 1; }
+                    else
+                    {
+                        gear[grabbable.GetType().Name] = 1;
+                    }
                 }
             }
 
@@ -44,6 +50,8 @@ namespace LethalLogger.Patches
             logger.LogInfo("Current Scrap Value is " + __instance.GetValueOfAllScrap(true) + " out of a max " + __instance.GetValueOfAllScrap(false));
             logger.LogInfo("Planet is: " + __instance.currentLevel.PlanetName);
             logger.LogInfo("Planet Weather was: " + __instance.currentLevel.currentWeather);
+            TimeOfDay timeOfDay = UnityEngine.Object.FindObjectOfType<TimeOfDay>();
+            logger.LogInfo("Quota is " +  timeOfDay.profitQuota);
             //count dead players done
             //get each player controller and get the cause of death done
             //get player names done
