@@ -1,0 +1,8 @@
+{
+    "name": "LethalLogger",
+    "version_number": "1.0.0",
+    "website_url": "https://github.com/NoodleLadJr/LethalLogger",
+    "description": "A mod that collects stats from Lethal Company runs to a JSON file in the output file next to the game. There will be a companion R Script to generate insights into game stats.",
+    "dependencies": ["BepInEx-BepInExPack-5.4.2100"]
+
+}
