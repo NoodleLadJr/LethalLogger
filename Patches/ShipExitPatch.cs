@@ -28,6 +28,7 @@ namespace LethalLogger.Patches
             public String planetName;
             public String weather;
             public String seed;
+            public List<String> unlockables = new List<String>();
             public IDictionary<string, int> gear = new Dictionary<string, int>();
             public IDictionary<string, string> playerStatus = new Dictionary<string, string>();
 
@@ -40,8 +41,6 @@ namespace LethalLogger.Patches
             RoundInfo roundInfo = new RoundInfo();
 
             ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("LethalLogger");
-            logger.LogInfo("Adniel Hamed");
-            //set to true to get collected, missed will be the diff
 
 
             foreach (PlayerControllerB playercontrollerb in GameObject.FindObjectsOfType<PlayerControllerB>())
@@ -71,6 +70,15 @@ namespace LethalLogger.Patches
                     }
                 }
             }
+
+            foreach (UnlockableItem unlockable in __instance.unlockablesList.unlockables)
+            {
+                if(unlockable.hasBeenUnlockedByPlayer)
+                {
+                    logger.LogInfo(unlockable.unlockableName);
+                    roundInfo.unlockables.Add(unlockable.unlockableName);
+                }
+            }
             roundInfo.scrapMax = __instance.GetValueOfAllScrap(false);
             roundInfo.scrapReal = __instance.GetValueOfAllScrap(true);
             roundInfo.planetName = __instance.currentLevel.PlanetName;
@@ -80,7 +88,10 @@ namespace LethalLogger.Patches
             roundInfo.daysRemaining = timeOfDay.daysUntilDeadline;
             roundInfo.seed = __instance.randomMapSeed.ToString();
 
-            const String FILEOUT = "LethalLoggerOut.json";
+            System.IO.Directory.CreateDirectory("LethalLoggerOutput");
+            String date = DateTime.Today.ToString("dd-mm-yyyy");
+            String FILEOUT = String.Format("LethalLoggerOutput/LethalLoggerOut{0}.json",date);
+
             try
             {
                 if (File.Exists(FILEOUT))
@@ -100,21 +111,8 @@ namespace LethalLogger.Patches
             }
             catch (Exception ex)
             {
-                // Handle exceptions appropriately
                 logger.LogWarning(ex);
             }
-
-            //count dead players done
-            //get each player controller and get the cause of death done
-            //get player names done
-            //get planet name done
-            //get planet weather done
-            //get planet done
-            //get gear
-            //get current quota
-            //TODO: get unlockables
-            //get seed
-            //write file
 
         }
     }
