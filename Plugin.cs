@@ -22,11 +22,14 @@ namespace LethalLogger
         private static LethalLoggerBase Instance;
         public ManualLogSource mls;
 
+        public RoundInfo currentRound = new RoundInfo();
+
         void Awake()
         {
             if (Instance == null) { Instance = this; }
             mls = BepInEx.Logging.Logger.CreateLogSource(modGUID);
             mls.LogInfo("LethalLogger is awake");
+            ShipExitPatch.Initialize(this);
             harmony.PatchAll(typeof(LethalLoggerBase));
             harmony.PatchAll(typeof(ShipExitPatch));
         }
