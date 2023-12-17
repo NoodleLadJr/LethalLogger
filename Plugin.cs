@@ -32,6 +32,7 @@ namespace LethalLogger
             ShipExitPatch.Initialize(this);
             harmony.PatchAll(typeof(LethalLoggerBase));
             harmony.PatchAll(typeof(ShipExitPatch));
+            harmony.PatchAll(typeof(TeleportPatch));
         }
         
 

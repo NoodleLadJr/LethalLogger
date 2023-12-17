@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Patches\ShipExitPatch.cs" />
+    <Compile Include="Patches\TeleportPatch.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoundInfo.cs" />
