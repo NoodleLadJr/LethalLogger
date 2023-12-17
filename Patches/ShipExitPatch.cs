@@ -99,7 +99,7 @@ namespace LethalLogger.Patches
                     string existing = File.ReadAllText(FILEOUT);
                     List<RoundInfo> existingData = JsonConvert.DeserializeObject<List<RoundInfo>>(existing) ?? new List<RoundInfo>();
                     existingData.Add(roundInfo);
-                    string jstring = JsonConvert.SerializeObject(existingData);
+                    string jstring = JsonConvert.SerializeObject(existingData,Formatting.Indented);
                     File.WriteAllText(FILEOUT, jstring);
                 }
                 else 
