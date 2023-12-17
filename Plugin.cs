@@ -13,14 +13,14 @@ namespace LethalLogger
     [BepInPlugin(modGUID, modName, modVersion)]
     public class LethalLoggerBase : BaseUnityPlugin
     {
-        private const string modGUID = "Garageman.LethalLogger";
-        private const string modName = "LC Tutorial";
-        private const string modVersion = "1.0.0";
+        private const string modGUID = "NoodleLadJr.LethalLogger";
+        private const string modName = "LethalLogger";
+        private const string modVersion = "1.0.1";
 
         private readonly Harmony harmony = new Harmony(modGUID);
 
         private static LethalLoggerBase Instance;
-        internal ManualLogSource mls;
+        public ManualLogSource mls;
 
         void Awake()
         {

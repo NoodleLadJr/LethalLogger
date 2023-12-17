@@ -75,7 +75,7 @@ namespace LethalLogger.Patches
             {
                 if(unlockable.hasBeenUnlockedByPlayer)
                 {
-                    logger.LogInfo(unlockable.unlockableName);
+                   mls.LogInfo(unlockable.unlockableName);
                     roundInfo.unlockables.Add(unlockable.unlockableName);
                 }
             }
@@ -107,7 +107,7 @@ namespace LethalLogger.Patches
                     string jstring = JsonConvert.SerializeObject(new List<RoundInfo> { roundInfo});
                     File.WriteAllText(FILEOUT, jstring);
                 }
-                logger.LogInfo("logged successfully");
+               mls.LogInfo("logged successfully");
             }
             catch (Exception ex)
             {
